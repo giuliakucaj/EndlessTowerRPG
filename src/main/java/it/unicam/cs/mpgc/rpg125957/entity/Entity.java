@@ -29,4 +29,9 @@ public abstract class Entity {
     public int getAttackValue() {
         return stats.getAttack();
     }
+
+    //Metodo per attaccare un altro personaggio
+    public void attack(Entity target) {
+        target.takeDamage(getAttackValue());
+    }
 }

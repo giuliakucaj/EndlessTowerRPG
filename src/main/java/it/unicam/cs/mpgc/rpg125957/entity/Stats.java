@@ -49,10 +49,13 @@ public class Stats {
         return gold;
     }
 
-    //Riduce la vita quando il personaggio subisce danno
+    //Riduce la vita quando il personaggio subisce danno già calcolato
     public void takeDamage(int damage) {
-       int actualDamage = Math.max(0, damage - defense);
-       health = Math.max(0, health - actualDamage);
+        if (damage <= 0) {
+            return;
+        }
+
+        health = Math.max(0, health - damage);
     }
 
     //Cura il personaggio senza superare la vita massima
