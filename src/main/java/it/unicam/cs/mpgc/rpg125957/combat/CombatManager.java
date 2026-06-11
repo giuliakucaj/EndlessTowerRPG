@@ -12,11 +12,20 @@ public class CombatManager {
     }
 
     //Esegue un attacco tra due entità
-    public String attack(Entity attacker, Entity defender) {
+    public CombatResult attack(Entity attacker, Entity defender) {
         int damage = damageCalculator.calculateDamage(attacker, defender);
         defender.takeDamage(damage);
 
-        return attacker.getName() + " attacks " + defender.getName()
-                + " and deals " + damage + " damage.";
+        String message = attacker.getName() + " attacks "
+                + defender.getName()
+                + " and deals "
+                + damage
+                + " damage.";
+
+        return new CombatResult(
+                message,
+                damage,
+                !defender.isAlive()
+        );
     }
 }
