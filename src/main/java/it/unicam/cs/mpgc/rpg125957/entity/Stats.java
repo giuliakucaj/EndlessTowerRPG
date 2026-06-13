@@ -71,17 +71,20 @@ public class Stats {
         return health > 0;
     }
 
-    //Aggiunge esperienza
-    public void addExperience(int amount){
-        if(amount <= 0) {
-            return;
+    //Aggiunge esperienza e restituisce true se il personaggio sale di livello
+    public boolean addExperience(int amount) {
+        if (amount <= 0) {
+            return false;
         }
+
         experience += amount;
 
-        //se abbastanza esperienza fa level up
         if (experience >= level * 100) {
             levelUp();
+            return true;
         }
+
+        return false;
     }
 
     //Aggiunge oro

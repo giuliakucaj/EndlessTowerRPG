@@ -79,4 +79,17 @@ public class GameEngine {
         //Aggiorna lo stato del gioco
         gameState.setCurrentRoom(newRoom);
     }
+
+    //Ricompense ottenute dopo la vittoria
+    public boolean rewardPlayer() {
+        boolean levelUp = gameState.getPlayer()
+                .getStats()
+                .addExperience(getCurrentEnemy().getRewardExperience());
+
+        gameState.getPlayer()
+                .getStats()
+                .addGold(getCurrentEnemy().getRewardGold());
+
+        return levelUp;
+    }
 }
