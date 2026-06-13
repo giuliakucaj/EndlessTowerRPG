@@ -1,49 +1,28 @@
 package it.unicam.cs.mpgc.rpg125957;
 
-import it.unicam.cs.mpgc.rpg125957.combat.CombatResult;
-import it.unicam.cs.mpgc.rpg125957.combat.TurnManager;
 import it.unicam.cs.mpgc.rpg125957.entity.Enemy;
-import it.unicam.cs.mpgc.rpg125957.entity.EnemyType;
-import it.unicam.cs.mpgc.rpg125957.entity.Player;
-import it.unicam.cs.mpgc.rpg125957.entity.Stats;
+import it.unicam.cs.mpgc.rpg125957.tower.Room;
+import it.unicam.cs.mpgc.rpg125957.tower.TowerManager;
 
 public class Main {
 
     public static void main(String[] args) {
-        Player player = new Player("Hero", new Stats(100, 20, 5));
-        Enemy goblin = new Enemy(
-                "Goblin",
-                EnemyType.GOBLIN,
-                new Stats(50, 12, 2),
-                30,
-                10
-        );
+        TowerManager towerManager = new TowerManager();
 
-        TurnManager turnManager = new TurnManager();
+        for (int i = 0; i < 10; i++) {
+            Room room = towerManager.generateCurrentRoom();
+            Enemy enemy = room.getEnemy();
 
-        while (!turnManager.isCombatOver(player, goblin)) {
-            CombatResult playerResult = turnManager.playerTurn(player, goblin);
-            System.out.println(playerResult.getMessage());
-            System.out.println("Goblin HP: " + goblin.getStats().getHealth());
+            System.out.println("Floor: " + room.getFloorNumber());
+            System.out.println("Enemy: " + enemy.getName());
+            System.out.println("Type: " + enemy.getType());
+            System.out.println("HP: " + enemy.getStats().getHealth());
+            System.out.println("Attack: " + enemy.getStats().getAttack());
+            System.out.println("Defense: " + enemy.getStats().getDefense());
+            System.out.println("Boss room: " + room.isBossRoom());
+            System.out.println("----------------------");
 
-            if (goblin.isAlive()) {
-                CombatResult enemyResult = turnManager.enemyTurn(goblin, player);
-                System.out.println(enemyResult.getMessage());
-                System.out.println("Player HP: " + player.getStats().getHealth());
-            }
-
-            System.out.println("--------------------");
-        }
-
-        if (player.isAlive()) {
-            player.getStats().addExperience(goblin.getRewardExperience());
-            player.getStats().addGold(goblin.getRewardGold());
-
-            System.out.println("Victory!");
-            System.out.println("XP: " + player.getStats().getExperience());
-            System.out.println("Gold: " + player.getStats().getGold());
-        } else {
-            System.out.println("Game Over!");
+            towerManager.nextFloor();
         }
     }
 }
