@@ -11,7 +11,7 @@ public class Main {
         Player player = new Player("Hero", new Stats(100, 25, 5));
         GameEngine gameEngine = new GameEngine(player);
 
-        for (int floor = 0; floor < 3; floor++) {
+        for (int floor = 0; floor < 5; floor++) {
             System.out.println("FLOOR "
                     + gameEngine.getGameState().getCurrentRoom().getFloorNumber());
 
@@ -28,6 +28,16 @@ public class Main {
 
                 CombatResult enemyResult = gameEngine.enemyAttack();
                 System.out.println(enemyResult.getMessage());
+
+                if (player.getStats().getHealth() <= 50) {
+                    boolean usedPotion = gameEngine.usePotion();
+
+                    if (usedPotion) {
+                        System.out.println("Potion used!");
+                        System.out.println("Player HP: "
+                                + player.getStats().getHealth());
+                    }
+                }
             }
 
             if (!player.isAlive()) {
@@ -39,8 +49,13 @@ public class Main {
 
             boolean levelUp = gameEngine.rewardPlayer();
 
+            gameEngine.generateLoot().ifPresent(item ->
+                    System.out.println("Loot found: " + item.getName())
+            );
+
             System.out.println("XP: " + player.getStats().getExperience());
             System.out.println("Gold: " + player.getStats().getGold());
+            System.out.println("HP: " + player.getStats().getHealth());
 
             if (levelUp) {
                 System.out.println("LEVEL UP!");
