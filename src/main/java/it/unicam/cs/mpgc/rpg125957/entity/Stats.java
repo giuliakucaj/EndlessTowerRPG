@@ -21,6 +21,25 @@ public class Stats {
         this.experience = 0;
         this.gold = 0;
     }
+
+    //Costruttore usato quando si carica una partita salvata
+    public Stats(int maxHealth,
+                 int health,
+                 int attack,
+                 int defense,
+                 int level,
+                 int experience,
+                 int gold) {
+
+        this.maxHealth = maxHealth;
+        this.health = health;
+        this.attack = attack;
+        this.defense = defense;
+        this.level = level;
+        this.experience = experience;
+        this.gold = gold;
+    }
+
     // Getter per leggere le statistiche
     public int getMaxHealth() {
         return maxHealth;

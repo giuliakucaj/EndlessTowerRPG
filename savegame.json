@@ -1,0 +1,11 @@
+{
+  "playerName": "Hero",
+  "maxHealth": 120,
+  "health": 102,
+  "attack": 29,
+  "defense": 7,
+  "level": 3,
+  "experience": 250,
+  "gold": 136,
+  "currentFloor": 4
+}

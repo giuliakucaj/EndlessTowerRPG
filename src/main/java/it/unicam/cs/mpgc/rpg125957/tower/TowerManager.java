@@ -24,6 +24,15 @@ public class TowerManager {
         return currentFloor;
     }
 
+    //Imposta il piano corrente, utile quando si carica una partita
+    public void setCurrentFloor(int currentFloor) {
+        if (currentFloor < 1) {
+            this.currentFloor = 1;
+        } else {
+            this.currentFloor = currentFloor;
+        }
+    }
+
     //Genera la stanza del piano attuale
     public Room generateCurrentRoom() {
 
