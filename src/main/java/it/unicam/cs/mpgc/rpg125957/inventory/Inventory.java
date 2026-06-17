@@ -9,18 +9,19 @@ public class Inventory {
 
     private final List<Item> items;
 
+    //Costruttore dell'inventario
     public Inventory() {
         this.items = new ArrayList<>();
     }
 
     //Aggiunge un oggetto all'inventario
     public void addItem(Item item) {
-        if(item != null) {
+        if (item != null) {
             items.add(item);
         }
     }
 
-    //Rimuove oggetto dall'inventario
+    //Rimuove un oggetto dall'inventario
     public void removeItem(Item item) {
         items.remove(item);
     }
@@ -32,7 +33,8 @@ public class Inventory {
 
     //Controlla se l'inventario contiene almeno una pozione
     public boolean hasPotion() {
-        return items.stream().anyMatch(item -> item instanceof Potion);
+        return items.stream()
+                .anyMatch(item -> item instanceof Potion);
     }
 
     //Restituisce la prima pozione disponibile, se presente
@@ -42,5 +44,12 @@ public class Inventory {
                 .map(item -> (Potion) item)
                 .findFirst()
                 .orElse(null);
+    }
+
+    //Conta quante pozioni sono presenti nell'inventario
+    public long countPotions() {
+        return items.stream()
+                .filter(item -> item instanceof Potion)
+                .count();
     }
 }

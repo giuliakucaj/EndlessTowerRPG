@@ -20,6 +20,7 @@ public class GameView extends VBox {
     private final Label levelLabel;
     private final Label xpLabel;
     private final Label goldLabel;
+    private final Label potionsLabel;
 
     //Informazioni sul nemico corrente
     private final Label enemyLabel;
@@ -52,6 +53,7 @@ public class GameView extends VBox {
         levelLabel = new Label("Level: 1");
         xpLabel = new Label("XP: 0");
         goldLabel = new Label("Gold: 0");
+        potionsLabel = new Label("Potions: 0");
 
         //Informazioni sul nemico
         enemyLabel = new Label("Enemy: Unknown");
@@ -66,7 +68,6 @@ public class GameView extends VBox {
 
         //Contenitore orizzontale per i pulsanti di gioco
         HBox actionButtons = new HBox(10);
-
         actionButtons.getChildren().addAll(
                 attackButton,
                 potionButton
@@ -74,7 +75,6 @@ public class GameView extends VBox {
 
         //Contenitore orizzontale per i pulsanti di salvataggio
         HBox persistenceButtons = new HBox(10);
-
         persistenceButtons.getChildren().addAll(
                 saveButton,
                 loadButton
@@ -82,32 +82,23 @@ public class GameView extends VBox {
 
         //Area che mostra i messaggi del gioco
         combatLog = new TextArea();
-
-        //L'utente non può modificare il log
         combatLog.setEditable(false);
-
-        //Altezza iniziale del log
         combatLog.setPrefHeight(250);
 
         //Aggiunge tutti gli elementi alla finestra
         getChildren().addAll(
                 floorLabel,
-
                 playerHpLabel,
                 levelLabel,
                 xpLabel,
                 goldLabel,
-
+                potionsLabel,
                 enemyLabel,
-
                 actionButtons,
                 persistenceButtons,
-
                 combatLog
         );
     }
-
-    //Getter usati dal Main per aggiornare la GUI
 
     public Label getFloorLabel() {
         return floorLabel;
@@ -127,6 +118,10 @@ public class GameView extends VBox {
 
     public Label getGoldLabel() {
         return goldLabel;
+    }
+
+    public Label getPotionsLabel() {
+        return potionsLabel;
     }
 
     public Label getEnemyLabel() {
