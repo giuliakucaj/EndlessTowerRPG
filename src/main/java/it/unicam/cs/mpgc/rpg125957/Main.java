@@ -4,111 +4,58 @@ import it.unicam.cs.mpgc.rpg125957.combat.CombatResult;
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
 import it.unicam.cs.mpgc.rpg125957.entity.Stats;
 import it.unicam.cs.mpgc.rpg125957.model.GameEngine;
+import it.unicam.cs.mpgc.rpg125957.view.GameView;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Main {
+//Classe principale che avvia il gioco
+public class Main extends Application {
 
-    public static void main(String[] args) {
+    @Override
+    public void start(Stage stage) {
 
+        //Creazione del giocatore iniziale
         Player player = new Player(
                 "Hero",
                 new Stats(100, 25, 5)
         );
 
+        //Motore del gioco
         GameEngine gameEngine =
                 new GameEngine(player);
 
-        //Carica il salvataggio se esiste
-        try {
-            gameEngine.loadGame();
-            System.out.println("Game loaded!");
-        } catch (Exception e) {
-            System.out.println("No save found. Starting new game.");
-        }
+        //Interfaccia grafica
+        GameView gameView =
+                new GameView();
 
-        for (int floor = 0; floor < 5; floor++) {
+        //Aggiorna le informazioni mostrate nella GUI
+        Runnable updateUI = () -> {
 
-            System.out.println(
-                    "FLOOR "
+            gameView.getFloorLabel().setText(
+                    "Floor: "
                             + gameEngine.getGameState()
                             .getCurrentRoom()
                             .getFloorNumber()
             );
 
-            System.out.println(
-                    "Enemy: "
-                            + gameEngine.getCurrentEnemy()
-                            .getName()
+            gameView.getPlayerHpLabel().setText(
+                    "Player HP: "
+                            + gameEngine.getGameState()
+                            .getPlayer()
+                            .getStats()
+                            .getHealth()
             );
 
-            while (!gameEngine.isCombatOver()) {
-
-                CombatResult playerResult =
-                        gameEngine.playerAttack();
-
-                System.out.println(
-                        playerResult.getMessage()
-                );
-
-                if (!gameEngine.getCurrentEnemy()
-                        .isAlive()) {
-                    break;
-                }
-
-                CombatResult enemyResult =
-                        gameEngine.enemyAttack();
-
-                System.out.println(
-                        enemyResult.getMessage()
-                );
-
-                //Usa automaticamente una pozione
-                if (player.getStats()
-                        .getHealth() <= 50) {
-
-                    boolean usedPotion =
-                            gameEngine.usePotion();
-
-                    if (usedPotion) {
-                        System.out.println(
-                                "Potion used!"
-                        );
-
-                        System.out.println(
-                                "Player HP: "
-                                        + player.getStats()
-                                        .getHealth()
-                        );
-                    }
-                }
-            }
-
-            if (!gameEngine.getGameState()
-                    .getPlayer()
-                    .isAlive()) {
-
-                System.out.println(
-                        "Game Over!"
-                );
-
-                return;
-            }
-
-            System.out.println(
-                    "Victory!"
+            gameView.getLevelLabel().setText(
+                    "Level: "
+                            + gameEngine.getGameState()
+                            .getPlayer()
+                            .getStats()
+                            .getLevel()
             );
 
-            boolean levelUp =
-                    gameEngine.rewardPlayer();
-
-            gameEngine.generateLoot()
-                    .ifPresent(item ->
-                            System.out.println(
-                                    "Loot found: "
-                                            + item.getName()
-                            )
-                    );
-
-            System.out.println(
+            gameView.getXpLabel().setText(
                     "XP: "
                             + gameEngine.getGameState()
                             .getPlayer()
@@ -116,7 +63,7 @@ public class Main {
                             .getExperience()
             );
 
-            System.out.println(
+            gameView.getGoldLabel().setText(
                     "Gold: "
                             + gameEngine.getGameState()
                             .getPlayer()
@@ -124,37 +71,212 @@ public class Main {
                             .getGold()
             );
 
-            if (levelUp) {
-                System.out.println(
-                        "LEVEL UP!"
-                );
-
-                System.out.println(
-                        "Level: "
-                                + gameEngine.getGameState()
-                                .getPlayer()
-                                .getStats()
-                                .getLevel()
-                );
-            }
-
-            //Salvataggio automatico
-            try {
-                gameEngine.saveGame();
-                System.out.println(
-                        "Game saved."
-                );
-            } catch (Exception e) {
-                System.out.println(
-                        "Save failed."
-                );
-            }
-
-            System.out.println(
-                    "----------------------"
+            gameView.getEnemyLabel().setText(
+                    "Enemy: "
+                            + gameEngine.getCurrentEnemy()
+                            .getName()
             );
+        };
 
-            gameEngine.nextFloor();
-        }
+        //Aggiornamento iniziale della GUI
+        updateUI.run();
+
+        //Pulsante Attack
+        gameView.getAttackButton()
+                .setOnAction(event -> {
+
+                    CombatResult playerResult =
+                            gameEngine.playerAttack();
+
+                    gameView.getCombatLog()
+                            .appendText(
+                                    playerResult.getMessage()
+                                            + "\n"
+                            );
+
+                    //Nemico sconfitto
+                    if (!gameEngine.getCurrentEnemy()
+                            .isAlive()) {
+
+                        gameView.getCombatLog()
+                                .appendText("Victory!\n");
+
+                        boolean levelUp =
+                                gameEngine.rewardPlayer();
+
+                        gameEngine.generateLoot()
+                                .ifPresent(item ->
+                                        gameView.getCombatLog()
+                                                .appendText(
+                                                        "Loot found: "
+                                                                + item.getName()
+                                                                + "\n"
+                                                )
+                                );
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "XP: "
+                                                + gameEngine.getGameState()
+                                                .getPlayer()
+                                                .getStats()
+                                                .getExperience()
+                                                + "\n"
+                                );
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Gold: "
+                                                + gameEngine.getGameState()
+                                                .getPlayer()
+                                                .getStats()
+                                                .getGold()
+                                                + "\n"
+                                );
+
+                        if (levelUp) {
+                            gameView.getCombatLog()
+                                    .appendText("LEVEL UP!\n");
+                        }
+
+                        try {
+                            gameEngine.saveGame();
+
+                            gameView.getCombatLog()
+                                    .appendText("Game saved.\n");
+
+                        } catch (Exception e) {
+
+                            gameView.getCombatLog()
+                                    .appendText("Save failed.\n");
+                        }
+
+                        gameEngine.nextFloor();
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Moving to next floor...\n"
+                                );
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "----------------------\n"
+                                );
+
+                        updateUI.run();
+
+                        return;
+                    }
+
+                    //Turno del nemico
+                    CombatResult enemyResult =
+                            gameEngine.enemyAttack();
+
+                    gameView.getCombatLog()
+                            .appendText(
+                                    enemyResult.getMessage()
+                                            + "\n"
+                            );
+
+                    updateUI.run();
+
+                    //Player sconfitto
+                    if (!gameEngine.getGameState()
+                            .getPlayer()
+                            .isAlive()) {
+
+                        gameView.getCombatLog()
+                                .appendText("Game Over!\n");
+
+                        gameView.getAttackButton()
+                                .setDisable(true);
+                    }
+                });
+
+        //Pulsante Use Potion
+        gameView.getPotionButton()
+                .setOnAction(event -> {
+
+                    boolean usedPotion =
+                            gameEngine.usePotion();
+
+                    if (usedPotion) {
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Potion used!\n"
+                                );
+
+                    } else {
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "No potion available.\n"
+                                );
+                    }
+
+                    updateUI.run();
+                });
+
+        //Pulsante Save
+        gameView.getSaveButton()
+                .setOnAction(event -> {
+
+                    try {
+
+                        gameEngine.saveGame();
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Game saved.\n"
+                                );
+
+                    } catch (Exception e) {
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Save failed.\n"
+                                );
+                    }
+                });
+
+        //Pulsante Load
+        gameView.getLoadButton()
+                .setOnAction(event -> {
+
+                    try {
+
+                        gameEngine.loadGame();
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Game loaded.\n"
+                                );
+
+                        updateUI.run();
+
+                        gameView.getAttackButton()
+                                .setDisable(false);
+
+                    } catch (Exception e) {
+
+                        gameView.getCombatLog()
+                                .appendText(
+                                        "Load failed.\n"
+                                );
+                    }
+                });
+
+        //Creazione della scena
+        Scene scene =
+                new Scene(gameView, 600, 500);
+
+        stage.setTitle("Endless Tower RPG");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
