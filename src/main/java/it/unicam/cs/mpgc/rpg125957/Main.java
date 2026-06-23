@@ -75,6 +75,12 @@ public class Main extends Application {
                     "Enemy: " + gameEngine.getCurrentEnemy()
                             .getName()
             );
+
+            gameView.getEnemyHpLabel().setText(
+                    "Enemy HP: " + gameEngine.getCurrentEnemy()
+                            .getStats()
+                            .getHealth()
+            );
         };
 
         updateUI.run();
@@ -85,6 +91,9 @@ public class Main extends Application {
             CombatResult playerResult = gameEngine.playerAttack();
             gameView.getCombatLog().appendText(playerResult.getMessage() + "\n");
 
+            updateUI.run();
+
+            //Nemico sconfitto
             if (!gameEngine.getCurrentEnemy().isAlive()) {
 
                 gameView.getCombatLog().appendText("Victory!\n");
@@ -121,9 +130,13 @@ public class Main extends Application {
 
             updateUI.run();
 
+            //Player sconfitto
             if (!gameEngine.getGameState().getPlayer().isAlive()) {
                 gameView.getCombatLog().appendText("Game Over!\n");
+
                 gameView.getAttackButton().setDisable(true);
+                gameView.getPotionButton().setDisable(true);
+                gameView.getSaveButton().setDisable(true);
             }
         });
 
@@ -164,13 +177,15 @@ public class Main extends Application {
                 updateUI.run();
 
                 gameView.getAttackButton().setDisable(false);
+                gameView.getPotionButton().setDisable(false);
+                gameView.getSaveButton().setDisable(false);
 
             } catch (Exception e) {
                 gameView.getCombatLog().appendText("Load failed.\n");
             }
         });
 
-        Scene scene = new Scene(gameView, 600, 500);
+        Scene scene = new Scene(gameView, 600, 550);
 
         stage.setTitle("Endless Tower RPG");
         stage.setScene(scene);

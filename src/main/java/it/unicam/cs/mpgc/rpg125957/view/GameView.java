@@ -12,90 +12,82 @@ import javafx.scene.layout.VBox;
 //La logica del gioco rimane nel GameEngine.
 public class GameView extends VBox {
 
-    //Informazioni sulla torre
     private final Label floorLabel;
 
-    //Statistiche del giocatore
+    private final Label playerTitleLabel;
     private final Label playerHpLabel;
     private final Label levelLabel;
     private final Label xpLabel;
     private final Label goldLabel;
     private final Label potionsLabel;
 
-    //Informazioni sul nemico corrente
+    private final Label enemyTitleLabel;
     private final Label enemyLabel;
+    private final Label enemyHpLabel;
 
-    //Pulsanti di gioco
     private final Button attackButton;
     private final Button potionButton;
-
-    //Pulsanti per la persistenza
     private final Button saveButton;
     private final Button loadButton;
 
-    //Area che mostra gli eventi del combattimento
     private final TextArea combatLog;
 
-    //Costruttore della GUI
     public GameView() {
-
-        //VBox = disposizione verticale degli elementi
         setSpacing(10);
-
-        //Margini interni della finestra
         setPadding(new Insets(20));
 
-        //Informazioni della torre
         floorLabel = new Label("Floor: 1");
 
-        //Statistiche del giocatore
+        playerTitleLabel = new Label("=== PLAYER ===");
         playerHpLabel = new Label("Player HP: 100");
         levelLabel = new Label("Level: 1");
         xpLabel = new Label("XP: 0");
         goldLabel = new Label("Gold: 0");
         potionsLabel = new Label("Potions: 0");
 
-        //Informazioni sul nemico
+        enemyTitleLabel = new Label("=== ENEMY ===");
         enemyLabel = new Label("Enemy: Unknown");
+        enemyHpLabel = new Label("Enemy HP: 0");
 
-        //Azioni disponibili durante il combattimento
         attackButton = new Button("Attack");
         potionButton = new Button("Use Potion");
 
-        //Azioni di persistenza
         saveButton = new Button("Save");
         loadButton = new Button("Load");
 
-        //Contenitore orizzontale per i pulsanti di gioco
         HBox actionButtons = new HBox(10);
         actionButtons.getChildren().addAll(
                 attackButton,
                 potionButton
         );
 
-        //Contenitore orizzontale per i pulsanti di salvataggio
         HBox persistenceButtons = new HBox(10);
         persistenceButtons.getChildren().addAll(
                 saveButton,
                 loadButton
         );
 
-        //Area che mostra i messaggi del gioco
         combatLog = new TextArea();
         combatLog.setEditable(false);
         combatLog.setPrefHeight(250);
 
-        //Aggiunge tutti gli elementi alla finestra
         getChildren().addAll(
                 floorLabel,
+
+                playerTitleLabel,
                 playerHpLabel,
                 levelLabel,
                 xpLabel,
                 goldLabel,
                 potionsLabel,
+
+                enemyTitleLabel,
                 enemyLabel,
+                enemyHpLabel,
+
                 actionButtons,
                 persistenceButtons,
+
                 combatLog
         );
     }
@@ -126,6 +118,10 @@ public class GameView extends VBox {
 
     public Label getEnemyLabel() {
         return enemyLabel;
+    }
+
+    public Label getEnemyHpLabel() {
+        return enemyHpLabel;
     }
 
     public Button getAttackButton() {
