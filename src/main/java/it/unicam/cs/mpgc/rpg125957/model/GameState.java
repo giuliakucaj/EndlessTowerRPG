@@ -1,17 +1,17 @@
 package it.unicam.cs.mpgc.rpg125957.model;
 
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
-import it.unicam.cs.mpgc.rpg125957.tower.Room;
+import it.unicam.cs.mpgc.rpg125957.tower.Floor;
 
 //Classe che rappresenta lo stato corrente della partita
 public class GameState {
 
     private final Player player;
-    private Room currentRoom;
+    private Floor currentFloor;
 
-    public GameState(Player player, Room currentRoom) {
+    public GameState(Player player, Floor currentFloor) {
         this.player = player;
-        this.currentRoom = currentRoom;
+        this.currentFloor = currentFloor;
     }
 
     //Restituisce il giocatore
@@ -19,13 +19,13 @@ public class GameState {
         return player;
     }
 
-    //Restituisce la stanza corrente
-    public Room getCurrentRoom() {
-        return currentRoom;
+    //Restituisce il piano corrente
+    public Floor getCurrentFloor() {
+        return currentFloor;
     }
 
-    //Aggiorna la stanza corrente
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
+    //Aggiorna il piano corrente
+    public void setCurrentFloor(Floor currentFloor) {
+        this.currentFloor = currentFloor;
     }
 }

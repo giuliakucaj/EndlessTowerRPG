@@ -11,7 +11,7 @@ import it.unicam.cs.mpgc.rpg125957.inventory.Potion;
 import it.unicam.cs.mpgc.rpg125957.persistence.JsonSaveManager;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveData;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveManager;
-import it.unicam.cs.mpgc.rpg125957.tower.Room;
+import it.unicam.cs.mpgc.rpg125957.tower.Floor;
 import it.unicam.cs.mpgc.rpg125957.tower.TowerManager;
 
 import java.io.IOException;
@@ -31,8 +31,8 @@ public class GameEngine {
         this.lootGenerator = new LootGenerator();
         this.saveManager = new JsonSaveManager();
 
-        Room firstRoom = towerManager.generateCurrentRoom();
-        this.gameState = new GameState(player, firstRoom);
+        Floor firstFloor = towerManager.generateCurrentFloor();
+        this.gameState = new GameState(player, firstFloor);
     }
 
     public GameState getGameState() {
@@ -40,7 +40,7 @@ public class GameEngine {
     }
 
     public Enemy getCurrentEnemy() {
-        return gameState.getCurrentRoom().getEnemy();
+        return gameState.getCurrentFloor().getEnemy();
     }
 
     public CombatResult playerAttack() {
@@ -106,7 +106,7 @@ public class GameEngine {
                 player.getStats().getLevel(),
                 player.getStats().getExperience(),
                 player.getStats().getGold(),
-                gameState.getCurrentRoom().getFloorNumber()
+                gameState.getCurrentFloor().getFloorNumber()
         );
 
         saveManager.save(saveData);
@@ -129,14 +129,14 @@ public class GameEngine {
 
         towerManager.setCurrentFloor(saveData.getCurrentFloor());
 
-        Room loadedRoom = towerManager.generateCurrentRoom();
+        Floor loadedFloor = towerManager.generateCurrentFloor();
 
-        this.gameState = new GameState(loadedPlayer, loadedRoom);
+        this.gameState = new GameState(loadedPlayer, loadedFloor);
     }
 
     public void nextFloor() {
         towerManager.nextFloor();
-        Room newRoom = towerManager.generateCurrentRoom();
-        gameState.setCurrentRoom(newRoom);
+        Floor newFloor = towerManager.generateCurrentFloor();
+        gameState.setCurrentFloor(newFloor);
     }
 }

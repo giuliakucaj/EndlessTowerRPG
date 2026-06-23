@@ -34,7 +34,7 @@ public class TowerManager {
     }
 
     //Genera la stanza del piano attuale
-    public Room generateCurrentRoom() {
+    public Floor generateCurrentFloor() {
 
         //Controlla se il piano contiene un boss
         boolean bossRoom = isBossFloor(currentFloor);
@@ -45,7 +45,7 @@ public class TowerManager {
                 : generateEnemy(currentFloor);
 
         //Crea e restituisce la stanza
-        return new Room(currentFloor, enemy, bossRoom);
+        return new Floor(currentFloor, enemy, bossRoom);
     }
 
     //Fa avanzare al piano successivo

@@ -32,7 +32,7 @@ public class Main extends Application {
 
             gameView.getFloorLabel().setText(
                     "Floor: " + gameEngine.getGameState()
-                            .getCurrentRoom()
+                            .getCurrentFloor()
                             .getFloorNumber()
             );
 
