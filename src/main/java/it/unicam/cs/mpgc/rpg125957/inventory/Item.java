@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.inventory;
 
-//Classe base astratta per tutti gli oggetti del gioco
+//Represents a generic item in the game
 public class Item {
 
     private final String name;

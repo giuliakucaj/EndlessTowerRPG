@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//Test della classe Inventory
+//Tests the inventory class
 class InventoryTest {
 
-    //Verifica che un oggetto venga aggiunto correttamente
+    //Verifies that an item is added correctly
     @Test
     void shouldAddPotionToInventory() {
 
@@ -25,7 +25,7 @@ class InventoryTest {
         assertTrue(inventory.hasPotion());
     }
 
-    //Verifica che un oggetto venga rimosso correttamente
+    //Verifies that an item is removed correctly
     @Test
     void shouldRemovePotionFromInventory() {
 
@@ -44,7 +44,7 @@ class InventoryTest {
         assertFalse(inventory.hasPotion());
     }
 
-    //Verifica il conteggio delle pozioni
+    //Verifies the potion count
     @Test
     void shouldCountPotionsCorrectly() {
 

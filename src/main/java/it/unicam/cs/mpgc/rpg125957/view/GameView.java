@@ -7,9 +7,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-//Classe che rappresenta la GUI del gioco.
-//Contiene solamente componenti grafici.
-//La logica del gioco rimane nel GameEngine.
+//Represents the game's GUI.
+//Contains only graphical components.
+//The game logic remains in GameEngine.
 public class GameView extends VBox {
 
     private final Label floorLabel;

@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.rpg125957.inventory;
 import java.util.Optional;
 import java.util.Random;
 
-//Classe che genera oggetti casuali dopo una vittoria
+//Generates random loot after a victory
 public class LootGenerator {
 
     private final Random random;
@@ -12,11 +12,11 @@ public class LootGenerator {
         this.random = new Random();
     }
 
-    //Genera un loot casuale: per ora solo pozioni
+    //Generates random loot, currently only potions
     public Optional<Item> generateLoot() {
         int chance = random.nextInt(100);
 
-        //50% di probabilità di trovare una pozione
+        //50% chance to find a potion
         if (chance < 50) {
             return Optional.of(
                     new Potion(

@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.combat;
 
-//Risultato di una singola azione di combattimento
+//Represents the result of a single combat action
 public class CombatResult {
 
     private final String message;

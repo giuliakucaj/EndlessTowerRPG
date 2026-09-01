@@ -2,7 +2,7 @@ package it.unicam.cs.mpgc.rpg125957.entity;
 
 import it.unicam.cs.mpgc.rpg125957.inventory.Inventory;
 
-//Classe che rappresenta il giocatore
+//Represents the player character
 public class Player extends Entity {
 
     private final Inventory inventory;
@@ -12,7 +12,7 @@ public class Player extends Entity {
         this.inventory = new Inventory();
     }
 
-    //Restituisce l'inventario del giocatore
+    //Returns the player's inventory
     public Inventory getInventory() {
         return inventory;
     }

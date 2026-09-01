@@ -1,190 +1,55 @@
 package it.unicam.cs.mpgc.rpg125957;
 
-import it.unicam.cs.mpgc.rpg125957.combat.CombatResult;
+import it.unicam.cs.mpgc.rpg125957.combat.TurnManager;
+import it.unicam.cs.mpgc.rpg125957.controller.GameController;
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
 import it.unicam.cs.mpgc.rpg125957.entity.Stats;
+import it.unicam.cs.mpgc.rpg125957.inventory.LootGenerator;
 import it.unicam.cs.mpgc.rpg125957.model.GameEngine;
+import it.unicam.cs.mpgc.rpg125957.persistence.JsonSaveManager;
+import it.unicam.cs.mpgc.rpg125957.persistence.SaveManager;
+import it.unicam.cs.mpgc.rpg125957.tower.FloorGenerator;
+import it.unicam.cs.mpgc.rpg125957.tower.TowerManager;
 import it.unicam.cs.mpgc.rpg125957.view.GameView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-//Classe principale che avvia il gioco
+//Main class that starts and configures the application
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
 
-        //Creazione del giocatore iniziale
+        //Creates the initial player
         Player player = new Player(
                 "Hero",
                 new Stats(100, 25, 5)
         );
 
-        //Motore del gioco
-        GameEngine gameEngine = new GameEngine(player);
+        //Creates the game dependencies
+        FloorGenerator floorGenerator = new FloorGenerator();
+        TowerManager towerManager = new TowerManager(floorGenerator);
+        TurnManager turnManager = new TurnManager();
+        LootGenerator lootGenerator = new LootGenerator();
+        SaveManager saveManager = new JsonSaveManager();
 
-        //Interfaccia grafica
+        //Creates the game engine
+        GameEngine gameEngine = new GameEngine(
+                player,
+                towerManager,
+                turnManager,
+                lootGenerator,
+                saveManager
+        );
+
+        //Creates the graphical interface
         GameView gameView = new GameView();
 
-        //Aggiorna le informazioni mostrate nella GUI
-        Runnable updateUI = () -> {
+        //Connects the view to the game engine
+        new GameController(gameEngine, gameView);
 
-            gameView.getFloorLabel().setText(
-                    "Floor: " + gameEngine.getGameState()
-                            .getCurrentFloor()
-                            .getFloorNumber()
-            );
-
-            gameView.getPlayerHpLabel().setText(
-                    "Player HP: " + gameEngine.getGameState()
-                            .getPlayer()
-                            .getStats()
-                            .getHealth()
-            );
-
-            gameView.getLevelLabel().setText(
-                    "Level: " + gameEngine.getGameState()
-                            .getPlayer()
-                            .getStats()
-                            .getLevel()
-            );
-
-            gameView.getXpLabel().setText(
-                    "XP: " + gameEngine.getGameState()
-                            .getPlayer()
-                            .getStats()
-                            .getExperience()
-            );
-
-            gameView.getGoldLabel().setText(
-                    "Gold: " + gameEngine.getGameState()
-                            .getPlayer()
-                            .getStats()
-                            .getGold()
-            );
-
-            gameView.getPotionsLabel().setText(
-                    "Potions: " + gameEngine.getGameState()
-                            .getPlayer()
-                            .getInventory()
-                            .countPotions()
-            );
-
-            gameView.getEnemyLabel().setText(
-                    "Enemy: " + gameEngine.getCurrentEnemy()
-                            .getName()
-            );
-
-            gameView.getEnemyHpLabel().setText(
-                    "Enemy HP: " + gameEngine.getCurrentEnemy()
-                            .getStats()
-                            .getHealth()
-            );
-        };
-
-        updateUI.run();
-
-        //Pulsante Attack
-        gameView.getAttackButton().setOnAction(event -> {
-
-            CombatResult playerResult = gameEngine.playerAttack();
-            gameView.getCombatLog().appendText(playerResult.getMessage() + "\n");
-
-            updateUI.run();
-
-            //Nemico sconfitto
-            if (!gameEngine.getCurrentEnemy().isAlive()) {
-
-                gameView.getCombatLog().appendText("Victory!\n");
-
-                boolean levelUp = gameEngine.rewardPlayer();
-
-                gameEngine.generateLoot().ifPresent(item ->
-                        gameView.getCombatLog()
-                                .appendText("Loot found: " + item.getName() + "\n")
-                );
-
-                if (levelUp) {
-                    gameView.getCombatLog().appendText("LEVEL UP!\n");
-                }
-
-                try {
-                    gameEngine.saveGame();
-                    gameView.getCombatLog().appendText("Game saved.\n");
-                } catch (Exception e) {
-                    gameView.getCombatLog().appendText("Save failed.\n");
-                }
-
-                gameEngine.nextFloor();
-
-                gameView.getCombatLog().appendText("Moving to next floor...\n");
-                gameView.getCombatLog().appendText("----------------------\n");
-
-                updateUI.run();
-                return;
-            }
-
-            CombatResult enemyResult = gameEngine.enemyAttack();
-            gameView.getCombatLog().appendText(enemyResult.getMessage() + "\n");
-
-            updateUI.run();
-
-            //Player sconfitto
-            if (!gameEngine.getGameState().getPlayer().isAlive()) {
-                gameView.getCombatLog().appendText("Game Over!\n");
-
-                gameView.getAttackButton().setDisable(true);
-                gameView.getPotionButton().setDisable(true);
-                gameView.getSaveButton().setDisable(true);
-            }
-        });
-
-        //Pulsante Use Potion
-        gameView.getPotionButton().setOnAction(event -> {
-
-            boolean usedPotion = gameEngine.usePotion();
-
-            if (usedPotion) {
-                gameView.getCombatLog().appendText("Potion used!\n");
-            } else {
-                gameView.getCombatLog().appendText("No potion available.\n");
-            }
-
-            updateUI.run();
-        });
-
-        //Pulsante Save
-        gameView.getSaveButton().setOnAction(event -> {
-
-            try {
-                gameEngine.saveGame();
-                gameView.getCombatLog().appendText("Game saved.\n");
-            } catch (Exception e) {
-                gameView.getCombatLog().appendText("Save failed.\n");
-            }
-        });
-
-        //Pulsante Load
-        gameView.getLoadButton().setOnAction(event -> {
-
-            try {
-                gameEngine.loadGame();
-
-                gameView.getCombatLog().clear();
-                gameView.getCombatLog().appendText("Game loaded.\n");
-
-                updateUI.run();
-
-                gameView.getAttackButton().setDisable(false);
-                gameView.getPotionButton().setDisable(false);
-                gameView.getSaveButton().setDisable(false);
-
-            } catch (Exception e) {
-                gameView.getCombatLog().appendText("Load failed.\n");
-            }
-        });
-
+        //Creates and shows the JavaFX scene
         Scene scene = new Scene(gameView, 600, 550);
 
         stage.setTitle("Endless Tower RPG");

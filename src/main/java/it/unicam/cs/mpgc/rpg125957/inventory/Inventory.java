@@ -4,40 +4,39 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//Classe che gestisce gli oggetti posseduti dal giocatore
+//Manages the player's inventory
 public class Inventory {
 
     private final List<Item> items;
 
-    //Costruttore dell'inventario
     public Inventory() {
         this.items = new ArrayList<>();
     }
 
-    //Aggiunge un oggetto all'inventario
+    //Adds an item to the inventory
     public void addItem(Item item) {
         if (item != null) {
             items.add(item);
         }
     }
 
-    //Rimuove un oggetto dall'inventario
+    //Removes an item from the inventory
     public void removeItem(Item item) {
         items.remove(item);
     }
 
-    //Restituisce una lista non modificabile degli oggetti
+    //Returns an unmodifiable list of items
     public List<Item> getItems() {
         return Collections.unmodifiableList(items);
     }
 
-    //Controlla se l'inventario contiene almeno una pozione
+    //Checks whether the inventory contains at least one potion
     public boolean hasPotion() {
         return items.stream()
                 .anyMatch(item -> item instanceof Potion);
     }
 
-    //Restituisce la prima pozione disponibile, se presente
+    //Returns the first available potion, if any
     public Potion getFirstPotion() {
         return items.stream()
                 .filter(item -> item instanceof Potion)
@@ -46,7 +45,7 @@ public class Inventory {
                 .orElse(null);
     }
 
-    //Conta quante pozioni sono presenti nell'inventario
+    //Counts the number of potions in the inventory
     public long countPotions() {
         return items.stream()
                 .filter(item -> item instanceof Potion)

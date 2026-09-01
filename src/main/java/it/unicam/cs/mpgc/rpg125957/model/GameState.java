@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.rpg125957.model;
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
 import it.unicam.cs.mpgc.rpg125957.tower.Floor;
 
-//Classe che rappresenta lo stato corrente della partita
+//Represents the current state of the game
 public class GameState {
 
     private final Player player;
@@ -14,17 +14,14 @@ public class GameState {
         this.currentFloor = currentFloor;
     }
 
-    //Restituisce il giocatore
     public Player getPlayer() {
         return player;
     }
 
-    //Restituisce il piano corrente
     public Floor getCurrentFloor() {
         return currentFloor;
     }
 
-    //Aggiorna il piano corrente
     public void setCurrentFloor(Floor currentFloor) {
         this.currentFloor = currentFloor;
     }

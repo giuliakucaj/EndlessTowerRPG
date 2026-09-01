@@ -7,21 +7,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-//Implementazione JSON del sistema di persistenza
+//JSON implementation of the persistence system
 public class JsonSaveManager implements SaveManager {
 
     private static final String SAVE_FILE = "savegame.json";
 
     private final Gson gson;
 
-    //Costruttore del manager JSON
+    //Creates a JSON save manager
     public JsonSaveManager() {
         this.gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
     }
 
-    //Salva i dati della partita su file JSON
+    //Save the game data to a JSON file
     @Override
     public void save(SaveData saveData) throws IOException {
         try (FileWriter writer = new FileWriter(SAVE_FILE)) {
@@ -29,7 +29,7 @@ public class JsonSaveManager implements SaveManager {
         }
     }
 
-    //Carica i dati della partita da file JSON
+    //Loads the game data form a JSON file
     @Override
     public SaveData load() throws IOException {
         try (FileReader reader = new FileReader(SAVE_FILE)) {

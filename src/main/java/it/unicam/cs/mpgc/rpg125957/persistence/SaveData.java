@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.persistence;
 
-//Classe dati usata per salvare/caricare la partita in JSON
+//Data class used to save and load game data in JSON format
 public class SaveData {
 
     private String playerName;
@@ -13,11 +13,10 @@ public class SaveData {
     private int gold;
     private int currentFloor;
 
-    //Costruttore vuoto richiesto da Gson
     public SaveData() {
+
     }
 
-    //Costruttore completo
     public SaveData(String playerName,
                     int maxHealth,
                     int health,
