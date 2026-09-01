@@ -7,6 +7,7 @@ import it.unicam.cs.mpgc.rpg125957.entity.Stats;
 import it.unicam.cs.mpgc.rpg125957.inventory.LootGenerator;
 import it.unicam.cs.mpgc.rpg125957.model.GameEngine;
 import it.unicam.cs.mpgc.rpg125957.persistence.JsonSaveManager;
+import it.unicam.cs.mpgc.rpg125957.persistence.SaveDataMapper;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveManager;
 import it.unicam.cs.mpgc.rpg125957.tower.FloorGenerator;
 import it.unicam.cs.mpgc.rpg125957.tower.TowerManager;
@@ -33,6 +34,7 @@ public class Main extends Application {
         TurnManager turnManager = new TurnManager();
         LootGenerator lootGenerator = new LootGenerator();
         SaveManager saveManager = new JsonSaveManager();
+        SaveDataMapper saveDataMapper = new SaveDataMapper();
 
         //Creates the game engine
         GameEngine gameEngine = new GameEngine(
@@ -40,7 +42,8 @@ public class Main extends Application {
                 towerManager,
                 turnManager,
                 lootGenerator,
-                saveManager
+                saveManager,
+                saveDataMapper
         );
 
         //Creates the graphical interface

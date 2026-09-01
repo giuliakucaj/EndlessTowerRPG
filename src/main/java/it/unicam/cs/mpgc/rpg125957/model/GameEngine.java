@@ -4,11 +4,11 @@ import it.unicam.cs.mpgc.rpg125957.combat.CombatResult;
 import it.unicam.cs.mpgc.rpg125957.combat.TurnManager;
 import it.unicam.cs.mpgc.rpg125957.entity.Enemy;
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
-import it.unicam.cs.mpgc.rpg125957.entity.Stats;
 import it.unicam.cs.mpgc.rpg125957.inventory.Item;
 import it.unicam.cs.mpgc.rpg125957.inventory.LootGenerator;
 import it.unicam.cs.mpgc.rpg125957.inventory.Potion;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveData;
+import it.unicam.cs.mpgc.rpg125957.persistence.SaveDataMapper;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveManager;
 import it.unicam.cs.mpgc.rpg125957.tower.Floor;
 import it.unicam.cs.mpgc.rpg125957.tower.TowerManager;
@@ -23,6 +23,7 @@ public class GameEngine {
     private final TurnManager turnManager;
     private final LootGenerator lootGenerator;
     private final SaveManager saveManager;
+    private final SaveDataMapper saveDataMapper;
 
     private GameState gameState;
 
@@ -31,12 +32,14 @@ public class GameEngine {
             TowerManager towerManager,
             TurnManager turnManager,
             LootGenerator lootGenerator,
-            SaveManager saveManager
+            SaveManager saveManager,
+            SaveDataMapper saveDataMapper
     ) {
         this.towerManager = towerManager;
         this.turnManager = turnManager;
         this.lootGenerator = lootGenerator;
         this.saveManager = saveManager;
+        this.saveDataMapper = saveDataMapper;
 
         Floor firstFloor = towerManager.generateCurrentFloor();
         this.gameState = new GameState(player, firstFloor);
@@ -126,19 +129,8 @@ public class GameEngine {
 
     //Saves the current game state
     public void saveGame() throws IOException {
-        Player player = gameState.getPlayer();
-
-        SaveData saveData = new SaveData(
-                player.getName(),
-                player.getStats().getMaxHealth(),
-                player.getStats().getHealth(),
-                player.getStats().getAttack(),
-                player.getStats().getDefense(),
-                player.getStats().getLevel(),
-                player.getStats().getExperience(),
-                player.getStats().getGold(),
-                gameState.getCurrentFloor().getFloorNumber()
-        );
+        SaveData saveData =
+                saveDataMapper.toSaveData(gameState);
 
         saveManager.save(saveData);
     }
@@ -147,20 +139,8 @@ public class GameEngine {
     public void loadGame() throws IOException {
         SaveData saveData = saveManager.load();
 
-        Stats loadedStats = new Stats(
-                saveData.getMaxHealth(),
-                saveData.getHealth(),
-                saveData.getAttack(),
-                saveData.getDefense(),
-                saveData.getLevel(),
-                saveData.getExperience(),
-                saveData.getGold()
-        );
-
-        Player loadedPlayer = new Player(
-                saveData.getPlayerName(),
-                loadedStats
-        );
+        Player loadedPlayer =
+                saveDataMapper.toPlayer(saveData);
 
         towerManager.setCurrentFloor(
                 saveData.getCurrentFloor()
