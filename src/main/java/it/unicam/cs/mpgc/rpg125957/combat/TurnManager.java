@@ -8,22 +8,31 @@ public class TurnManager {
 
     private final CombatManager combatManager;
 
-    public TurnManager() {
-        this.combatManager = new CombatManager();
+    public TurnManager(CombatManager combatManager) {
+        this.combatManager = combatManager;
     }
 
     //Executes the player's turn
-    public CombatResult playerTurn(Player player, Enemy enemy) {
+    public CombatResult playerTurn(
+            Player player,
+            Enemy enemy
+    ) {
         return combatManager.attack(player, enemy);
     }
 
     //Executes the enemy's turn
-    public CombatResult enemyTurn(Enemy enemy, Player player) {
+    public CombatResult enemyTurn(
+            Enemy enemy,
+            Player player
+    ) {
         return combatManager.attack(enemy, player);
     }
 
-    //Check whether the combat is over
-    public boolean isCombatOver(Player player, Enemy enemy) {
+    //Checks whether the combat is over
+    public boolean isCombatOver(
+            Player player,
+            Enemy enemy
+    ) {
         return !player.isAlive() || !enemy.isAlive();
     }
 }

@@ -10,6 +10,7 @@ public abstract class Entity {
         this.name = name;
         this.stats = stats;
     }
+
     public String getName() {
         return name;
     }
@@ -33,8 +34,8 @@ public abstract class Entity {
         return stats.getAttack();
     }
 
-    //Attacks another entity
-    public void attack(Entity target) {
-        target.takeDamage(getAttackValue());
+    //Returns the defense value of the entity
+    public int getDefenseValue() {
+        return stats.getDefense();
     }
 }
