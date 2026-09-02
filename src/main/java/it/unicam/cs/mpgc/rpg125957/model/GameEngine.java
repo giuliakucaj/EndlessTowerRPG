@@ -6,7 +6,7 @@ import it.unicam.cs.mpgc.rpg125957.entity.Enemy;
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
 import it.unicam.cs.mpgc.rpg125957.inventory.Item;
 import it.unicam.cs.mpgc.rpg125957.inventory.LootGenerator;
-import it.unicam.cs.mpgc.rpg125957.inventory.Potion;
+import it.unicam.cs.mpgc.rpg125957.inventory.UsableItem;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveData;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveDataMapper;
 import it.unicam.cs.mpgc.rpg125957.persistence.SaveManager;
@@ -108,21 +108,25 @@ public class GameEngine {
         return loot;
     }
 
-    //Uses the first available potion
-    public boolean usePotion() {
-        Potion potion = gameState.getPlayer()
-                .getInventory()
-                .getFirstPotion();
+    //Uses the first available usable item
+    public boolean useUsableItem() {
 
-        if (potion == null) {
+        Optional<UsableItem> usableItem =
+                gameState.getPlayer()
+                        .getInventory()
+                        .getFirstUsableItem();
+
+        if (usableItem.isEmpty()) {
             return false;
         }
 
-        potion.use(gameState.getPlayer());
+        UsableItem item = usableItem.get();
+
+        item.use(gameState.getPlayer());
 
         gameState.getPlayer()
                 .getInventory()
-                .removeItem(potion);
+                .removeItem((Item) item);
 
         return true;
     }

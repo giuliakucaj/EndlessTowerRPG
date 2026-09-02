@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.persistence;
 
-//Data class used to save and load game data in JSON format
+//Contains the data needed to save and load a game
 public class SaveData {
 
     private String playerName;
@@ -12,21 +12,23 @@ public class SaveData {
     private int experience;
     private int gold;
     private int currentFloor;
+    private int potionCount;
 
     public SaveData() {
-
     }
 
-    public SaveData(String playerName,
-                    int maxHealth,
-                    int health,
-                    int attack,
-                    int defense,
-                    int level,
-                    int experience,
-                    int gold,
-                    int currentFloor) {
-
+    public SaveData(
+            String playerName,
+            int maxHealth,
+            int health,
+            int attack,
+            int defense,
+            int level,
+            int experience,
+            int gold,
+            int currentFloor,
+            int potionCount
+    ) {
         this.playerName = playerName;
         this.maxHealth = maxHealth;
         this.health = health;
@@ -36,6 +38,7 @@ public class SaveData {
         this.experience = experience;
         this.gold = gold;
         this.currentFloor = currentFloor;
+        this.potionCount = potionCount;
     }
 
     public String getPlayerName() {
@@ -72,5 +75,9 @@ public class SaveData {
 
     public int getCurrentFloor() {
         return currentFloor;
+    }
+
+    public int getPotionCount() {
+        return potionCount;
     }
 }

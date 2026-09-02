@@ -2,13 +2,14 @@ package it.unicam.cs.mpgc.rpg125957.persistence;
 
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
 import it.unicam.cs.mpgc.rpg125957.entity.Stats;
+import it.unicam.cs.mpgc.rpg125957.inventory.Potion;
 import it.unicam.cs.mpgc.rpg125957.model.GameState;
 
-//Converts game domain objects to and from persistence data
+//Converts game objects to save data and vice versa
 public class SaveDataMapper {
 
-    //Converts the current game state into save data
     public SaveData toSaveData(GameState gameState) {
+
         Player player = gameState.getPlayer();
         Stats stats = player.getStats();
 
@@ -21,12 +22,13 @@ public class SaveDataMapper {
                 stats.getLevel(),
                 stats.getExperience(),
                 stats.getGold(),
-                gameState.getCurrentFloor().getFloorNumber()
+                gameState.getCurrentFloor().getFloorNumber(),
+                (int) player.getInventory().countPotions()
         );
     }
 
-    //Reconstructs a player from saved data
     public Player toPlayer(SaveData saveData) {
+
         Stats stats = new Stats(
                 saveData.getMaxHealth(),
                 saveData.getHealth(),
@@ -37,10 +39,21 @@ public class SaveDataMapper {
                 saveData.getGold()
         );
 
-        return new Player(
+        Player player = new Player(
                 saveData.getPlayerName(),
                 stats
         );
+
+        for (int i = 0; i < saveData.getPotionCount(); i++) {
+            player.getInventory().addItem(
+                    new Potion(
+                            "Small Potion",
+                            "Restores 25 HP",
+                            25
+                    )
+            );
+        }
+
+        return player;
     }
 }
-

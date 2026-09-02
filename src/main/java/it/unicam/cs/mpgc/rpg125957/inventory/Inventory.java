@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg125957.inventory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 //Manages the player's inventory
 public class Inventory {
@@ -30,19 +31,12 @@ public class Inventory {
         return Collections.unmodifiableList(items);
     }
 
-    //Checks whether the inventory contains at least one potion
-    public boolean hasPotion() {
+    //Returns the first usable item, if any
+    public Optional<UsableItem> getFirstUsableItem() {
         return items.stream()
-                .anyMatch(item -> item instanceof Potion);
-    }
-
-    //Returns the first available potion, if any
-    public Potion getFirstPotion() {
-        return items.stream()
-                .filter(item -> item instanceof Potion)
-                .map(item -> (Potion) item)
-                .findFirst()
-                .orElse(null);
+                .filter(item -> item instanceof UsableItem)
+                .map(item -> (UsableItem) item)
+                .findFirst();
     }
 
     //Counts the number of potions in the inventory

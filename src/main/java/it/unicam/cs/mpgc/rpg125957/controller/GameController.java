@@ -112,7 +112,7 @@ public class GameController {
 
     //Handles potion usage
     private void handlePotion() {
-        boolean usedPotion = gameEngine.usePotion();
+        boolean usedPotion = gameEngine.useUsableItem();
 
         if (usedPotion) {
             gameView.getCombatLog()
