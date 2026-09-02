@@ -17,4 +17,18 @@ public class Player extends Entity {
         return inventory;
     }
 
+    //Heals the player
+    public void heal(int amount) {
+        getStats().heal(amount);
+    }
+
+    //Adds experience and returns true if the player levels up
+    public boolean addExperience(int amount) {
+        return getStats().addExperience(amount);
+    }
+
+    //Adds gold to the player
+    public void addGold(int amount) {
+        getStats().addGold(amount);
+    }
 }

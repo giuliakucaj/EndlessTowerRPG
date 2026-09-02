@@ -81,13 +81,11 @@ public class GameEngine {
     //Awards experience and gold to the player
     public boolean rewardPlayer() {
         boolean levelUp = gameState.getPlayer()
-                .getStats()
                 .addExperience(
                         getCurrentEnemy().getRewardExperience()
                 );
 
         gameState.getPlayer()
-                .getStats()
                 .addGold(
                         getCurrentEnemy().getRewardGold()
                 );

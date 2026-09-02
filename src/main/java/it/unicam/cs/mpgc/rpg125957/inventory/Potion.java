@@ -12,12 +12,14 @@ public class Potion extends Item implements UsableItem {
         this.healAmount = healAmount;
     }
 
+    //Amount of health restored
     public int getHealAmount() {
         return healAmount;
     }
 
+    //Uses the potion on the player
     @Override
     public void use(Player player) {
-        player.getStats().heal(healAmount);
+        player.heal(healAmount);
     }
 }
