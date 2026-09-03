@@ -18,6 +18,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
     @Override
@@ -28,34 +30,68 @@ public class Main extends Application {
                 new Stats(100, 25, 5)
         );
 
-        FloorGenerator floorGenerator = new FloorGenerator();
-        TowerManager towerManager = new TowerManager(floorGenerator);
+        FloorGenerator floorGenerator =
+                new FloorGenerator();
 
-        DamageCalculator damageCalculator = new DamageCalculator();
-        CombatManager combatManager = new CombatManager(damageCalculator);
-        TurnManager turnManager = new TurnManager(combatManager);
+        TowerManager towerManager =
+                new TowerManager(floorGenerator);
 
-        LootGenerator lootGenerator = new LootGenerator();
+        DamageCalculator damageCalculator =
+                new DamageCalculator();
 
-        SaveManager saveManager = new JsonSaveManager();
-        SaveDataMapper saveDataMapper = new SaveDataMapper();
+        CombatManager combatManager =
+                new CombatManager(damageCalculator);
 
-        GameEngine gameEngine = new GameEngine(
-                player,
-                towerManager,
-                turnManager,
-                lootGenerator,
-                saveManager,
-                saveDataMapper
+        TurnManager turnManager =
+                new TurnManager(combatManager);
+
+        LootGenerator lootGenerator =
+                new LootGenerator();
+
+        SaveManager saveManager =
+                new JsonSaveManager();
+
+        SaveDataMapper saveDataMapper =
+                new SaveDataMapper();
+
+        GameEngine gameEngine =
+                new GameEngine(
+                        player,
+                        towerManager,
+                        turnManager,
+                        lootGenerator,
+                        saveManager,
+                        saveDataMapper
+                );
+
+        GameView gameView =
+                new GameView();
+
+        new GameController(
+                gameEngine,
+                gameView
         );
 
-        GameView gameView = new GameView();
-        new GameController(gameEngine, gameView);
+        Scene scene =
+                new Scene(
+                        gameView,
+                        760,
+                        720
+                );
 
-        Scene scene = new Scene(gameView, 600, 550);
+        scene.getStylesheets().add(
+                Objects.requireNonNull(
+                        getClass()
+                                .getResource("/css/game.css")
+                ).toExternalForm()
+        );
 
-        stage.setTitle("Endless Tower RPG");
+        stage.setTitle(
+                "Endless Tower RPG"
+        );
+
         stage.setScene(scene);
+
         stage.show();
     }
 

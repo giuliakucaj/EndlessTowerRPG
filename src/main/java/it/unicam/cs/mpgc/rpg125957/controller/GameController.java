@@ -1,8 +1,13 @@
 package it.unicam.cs.mpgc.rpg125957.controller;
 
 import it.unicam.cs.mpgc.rpg125957.combat.CombatResult;
+import it.unicam.cs.mpgc.rpg125957.entity.Enemy;
+import it.unicam.cs.mpgc.rpg125957.entity.Player;
+import it.unicam.cs.mpgc.rpg125957.inventory.Potion;
 import it.unicam.cs.mpgc.rpg125957.model.GameEngine;
+import it.unicam.cs.mpgc.rpg125957.view.CharacterView;
 import it.unicam.cs.mpgc.rpg125957.view.GameView;
+import it.unicam.cs.mpgc.rpg125957.view.SpriteManager;
 
 import java.io.IOException;
 
@@ -12,7 +17,10 @@ public class GameController {
     private final GameEngine gameEngine;
     private final GameView gameView;
 
-    public GameController(GameEngine gameEngine, GameView gameView) {
+    public GameController(
+            GameEngine gameEngine,
+            GameView gameView
+    ) {
         this.gameEngine = gameEngine;
         this.gameView = gameView;
 
@@ -20,58 +28,112 @@ public class GameController {
         updateUI();
     }
 
-    //Connects GUI buttons to game actions
     private void configureActions() {
-        gameView.getAttackButton().setOnAction(event -> handleAttack());
-        gameView.getPotionButton().setOnAction(event -> handlePotion());
-        gameView.getSaveButton().setOnAction(event -> handleSave());
-        gameView.getLoadButton().setOnAction(event -> handleLoad());
+
+        gameView.getAttackButton()
+                .setOnAction(event -> handleAttack());
+
+        gameView.getPotionButton()
+                .setOnAction(event -> handlePotion());
+
+        gameView.getBuyPotionButton()
+                .setOnAction(event -> handleBuyPotion());
+
+        gameView.getSaveButton()
+                .setOnAction(event -> handleSave());
+
+        gameView.getLoadButton()
+                .setOnAction(event -> handleLoad());
     }
 
-    //Handles the attack action
     private void handleAttack() {
-        CombatResult playerResult = gameEngine.playerAttack();
+
+        disableGameControls();
+
+        CombatResult playerResult =
+                gameEngine.playerAttack();
 
         gameView.getCombatLog()
-                .appendText(playerResult.getMessage() + "\n");
+                .appendText(
+                        playerResult.getMessage() + "\n"
+                );
 
-        updateUI();
+        gameView.getBattleView()
+                .animatePlayerAttack(
+                        playerResult.getDamage(),
+                        this::updateUI,
+                        () -> {
 
-        if (!gameEngine.getCurrentEnemy().isAlive()) {
-            handleVictory();
-            return;
-        }
+                            if (!gameEngine
+                                    .getCurrentEnemy()
+                                    .isAlive()) {
 
-        CombatResult enemyResult = gameEngine.enemyAttack();
+                                gameView.getBattleView()
+                                        .animateEnemyDefeat(
+                                                this::handleVictory
+                                        );
 
-        gameView.getCombatLog()
-                .appendText(enemyResult.getMessage() + "\n");
+                                return;
+                            }
 
-        updateUI();
-
-        if (!gameEngine.getGameState()
-                .getPlayer()
-                .isAlive()) {
-
-            handleGameOver();
-        }
+                            handleEnemyAttack();
+                        }
+                );
     }
 
-    //Handles victory on the current floor
+    private void handleEnemyAttack() {
+
+        CombatResult enemyResult =
+                gameEngine.enemyAttack();
+
+        gameView.getCombatLog()
+                .appendText(
+                        enemyResult.getMessage() + "\n"
+                );
+
+        gameView.getBattleView()
+                .animateEnemyAttack(
+                        enemyResult.getDamage(),
+                        this::updateUI,
+                        () -> {
+
+                            if (!gameEngine
+                                    .getGameState()
+                                    .getPlayer()
+                                    .isAlive()) {
+
+                                handleGameOver();
+                                return;
+                            }
+
+                            enableGameControls();
+                        }
+                );
+    }
+
     private void handleVictory() {
+
         gameView.getCombatLog()
                 .appendText("Victory!\n");
 
-        boolean levelUp = gameEngine.rewardPlayer();
+        boolean levelUp =
+                gameEngine.rewardPlayer();
 
-        gameEngine.generateLoot().ifPresent(item ->
-                gameView.getCombatLog()
-                        .appendText(
-                                "Loot found: "
-                                        + item.getName()
-                                        + "\n"
-                        )
-        );
+        gameEngine.generateLoot()
+                .ifPresent(item -> {
+
+                    gameView.getCombatLog()
+                            .appendText(
+                                    "Loot found: "
+                                            + item.getName()
+                                            + "\n"
+                            );
+
+                    if (item instanceof Potion) {
+                        gameView.getBattleView()
+                                .showPotionLoot();
+                    }
+                });
 
         if (levelUp) {
             gameView.getCombatLog()
@@ -79,152 +141,287 @@ public class GameController {
         }
 
         try {
+
             gameEngine.saveGame();
 
             gameView.getCombatLog()
                     .appendText("Game saved.\n");
 
         } catch (IOException e) {
+
             gameView.getCombatLog()
                     .appendText("Save failed.\n");
         }
 
         gameEngine.nextFloor();
 
-        gameView.getCombatLog()
-                .appendText("Moving to next floor...\n");
+        int newFloor =
+                gameEngine.getGameState()
+                        .getCurrentFloor()
+                        .getFloorNumber();
 
         gameView.getCombatLog()
-                .appendText("----------------------\n");
+                .appendText(
+                        "Moving to next floor...\n"
+                );
 
-        updateUI();
+        gameView.getCombatLog()
+                .appendText(
+                        "----------------------\n"
+                );
+
+        gameView.getBattleView()
+                .hideDamage();
+
+        gameView.getBattleView()
+                .showFloorTransition(
+                        newFloor,
+                        () -> {
+                            updateUI();
+                            enableGameControls();
+                        }
+                );
     }
 
-    //Handles player defeat
     private void handleGameOver() {
+
         gameView.getCombatLog()
                 .appendText("Game Over!\n");
 
-        gameView.getAttackButton().setDisable(true);
-        gameView.getPotionButton().setDisable(true);
-        gameView.getSaveButton().setDisable(true);
+        gameView.getBattleView()
+                .showGameOver();
+
+        gameView.getAttackButton()
+                .setDisable(true);
+
+        gameView.getPotionButton()
+                .setDisable(true);
+
+        gameView.getBuyPotionButton()
+                .setDisable(true);
+
+        gameView.getSaveButton()
+                .setDisable(true);
+
+        gameView.getLoadButton()
+                .setDisable(false);
     }
 
-    //Handles potion usage
     private void handlePotion() {
-        boolean usedPotion = gameEngine.useUsableItem();
+
+        boolean usedPotion =
+                gameEngine.useUsableItem();
 
         if (usedPotion) {
+
             gameView.getCombatLog()
-                    .appendText("Potion used!\n");
+                    .appendText(
+                            "Potion used!\n"
+                    );
+
+            gameView.getBattleView()
+                    .showPotionUsed();
+
         } else {
+
             gameView.getCombatLog()
-                    .appendText("No potion available.\n");
+                    .appendText(
+                            "No potion available.\n"
+                    );
         }
 
         updateUI();
     }
 
-    //Handles game saving
+    private void handleBuyPotion() {
+
+        boolean boughtPotion =
+                gameEngine.buyPotion();
+
+        if (boughtPotion) {
+
+            gameView.getCombatLog()
+                    .appendText(
+                            "Potion purchased for 20 gold!\n"
+                    );
+
+            gameView.getBattleView()
+                    .showPotionLoot();
+
+        } else {
+
+            gameView.getCombatLog()
+                    .appendText(
+                            "Not enough gold!\n"
+                    );
+
+            gameView.getBattleView()
+                    .showNotEnoughGold();
+        }
+
+        updateUI();
+    }
+
     private void handleSave() {
+
         try {
+
             gameEngine.saveGame();
 
             gameView.getCombatLog()
-                    .appendText("Game saved.\n");
+                    .appendText(
+                            "Game saved.\n"
+                    );
 
         } catch (IOException e) {
+
             gameView.getCombatLog()
-                    .appendText("Save failed.\n");
+                    .appendText(
+                            "Save failed.\n"
+                    );
         }
     }
 
-    //Handles game loading
     private void handleLoad() {
+
         try {
+
             gameEngine.loadGame();
 
-            gameView.getCombatLog().clear();
+            gameView.getCombatLog()
+                    .clear();
 
             gameView.getCombatLog()
-                    .appendText("Game loaded.\n");
+                    .appendText(
+                            "Game loaded.\n"
+                    );
+
+            gameView.getBattleView()
+                    .hideDamage();
+
+            gameView.getBattleView()
+                    .hideGameOver();
 
             enableGameControls();
             updateUI();
 
         } catch (IOException e) {
+
             gameView.getCombatLog()
-                    .appendText("Load failed.\n");
+                    .appendText(
+                            "Load failed.\n"
+                    );
         }
     }
 
-    //Enables the main game controls
-    private void enableGameControls() {
-        gameView.getAttackButton().setDisable(false);
-        gameView.getPotionButton().setDisable(false);
-        gameView.getSaveButton().setDisable(false);
+    private void disableGameControls() {
+
+        gameView.getAttackButton()
+                .setDisable(true);
+
+        gameView.getPotionButton()
+                .setDisable(true);
+
+        gameView.getBuyPotionButton()
+                .setDisable(true);
+
+        gameView.getSaveButton()
+                .setDisable(true);
+
+        gameView.getLoadButton()
+                .setDisable(true);
     }
 
-    //Updates the information shown in the GUI
+    private void enableGameControls() {
+
+        gameView.getAttackButton()
+                .setDisable(false);
+
+        gameView.getPotionButton()
+                .setDisable(false);
+
+        gameView.getBuyPotionButton()
+                .setDisable(false);
+
+        gameView.getSaveButton()
+                .setDisable(false);
+
+        gameView.getLoadButton()
+                .setDisable(false);
+    }
+
     private void updateUI() {
-        gameView.getFloorLabel().setText(
-                "Floor: "
-                        + gameEngine.getGameState()
-                        .getCurrentFloor()
-                        .getFloorNumber()
+
+        Player player =
+                gameEngine.getGameState()
+                        .getPlayer();
+
+        Enemy enemy =
+                gameEngine.getCurrentEnemy();
+
+        CharacterView playerView =
+                gameView.getBattleView()
+                        .getPlayerView();
+
+        CharacterView enemyView =
+                gameView.getBattleView()
+                        .getEnemyView();
+
+        gameView.getFloorLabel()
+                .setText(
+                        "Floor: "
+                                + gameEngine
+                                .getGameState()
+                                .getCurrentFloor()
+                                .getFloorNumber()
+                );
+
+        playerView.updateCharacter(
+                player.getName(),
+                player.getStats().getLevel(),
+                player.getStats().getHealth(),
+                player.getStats().getMaxHealth()
         );
 
-        gameView.getPlayerHpLabel().setText(
-                "Player HP: "
-                        + gameEngine.getGameState()
-                        .getPlayer()
-                        .getStats()
-                        .getHealth()
+        int requiredExperience =
+                player.getStats().getLevel() * 100;
+
+        playerView.updateExperience(
+                player.getStats().getExperience(),
+                requiredExperience
         );
 
-        gameView.getLevelLabel().setText(
-                "Level: "
-                        + gameEngine.getGameState()
-                        .getPlayer()
-                        .getStats()
-                        .getLevel()
+        playerView.setSprite(
+                SpriteManager.getPlayerSprite()
         );
 
-        gameView.getXpLabel().setText(
-                "XP: "
-                        + gameEngine.getGameState()
-                        .getPlayer()
-                        .getStats()
-                        .getExperience()
+        enemyView.updateCharacter(
+                enemy.getName(),
+                enemy.getStats().getLevel(),
+                enemy.getStats().getHealth(),
+                enemy.getStats().getMaxHealth()
         );
 
-        gameView.getGoldLabel().setText(
-                "Gold: "
-                        + gameEngine.getGameState()
-                        .getPlayer()
-                        .getStats()
-                        .getGold()
+        enemyView.hideExperience();
+
+        enemyView.setSprite(
+                SpriteManager.getEnemySprite(
+                        enemy.getType()
+                )
         );
 
-        gameView.getPotionsLabel().setText(
-                "Potions: "
-                        + gameEngine.getGameState()
-                        .getPlayer()
-                        .getInventory()
-                        .countPotions()
-        );
+        gameView.getGoldLabel()
+                .setText(
+                        "Gold: "
+                                + player.getStats()
+                                .getGold()
+                );
 
-        gameView.getEnemyLabel().setText(
-                "Enemy: "
-                        + gameEngine.getCurrentEnemy()
-                        .getName()
-        );
-
-        gameView.getEnemyHpLabel().setText(
-                "Enemy HP: "
-                        + gameEngine.getCurrentEnemy()
-                        .getStats()
-                        .getHealth()
-        );
+        gameView.getPotionsLabel()
+                .setText(
+                        "Potions: "
+                                + player.getInventory()
+                                .countPotions()
+                );
     }
 }

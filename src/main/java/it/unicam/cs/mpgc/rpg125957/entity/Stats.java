@@ -23,14 +23,15 @@ public class Stats {
     }
 
     //Creates statistics from saved game data
-    public Stats(int maxHealth,
-                 int health,
-                 int attack,
-                 int defense,
-                 int level,
-                 int experience,
-                 int gold) {
-
+    public Stats(
+            int maxHealth,
+            int health,
+            int attack,
+            int defense,
+            int level,
+            int experience,
+            int gold
+    ) {
         this.maxHealth = maxHealth;
         this.health = health;
         this.attack = attack;
@@ -39,7 +40,6 @@ public class Stats {
         this.experience = experience;
         this.gold = gold;
     }
-
 
     public int getMaxHealth() {
         return maxHealth;
@@ -60,6 +60,7 @@ public class Stats {
     public int getLevel() {
         return level;
     }
+
     public int getExperience() {
         return experience;
     }
@@ -79,10 +80,14 @@ public class Stats {
 
     //Heals the character without exceeding maximum health
     public void heal(int amount) {
-        if(amount <= 0) {
+        if (amount <= 0) {
             return;
         }
-        health = Math.min(maxHealth, health + amount);
+
+        health = Math.min(
+                maxHealth,
+                health + amount
+        );
     }
 
     //Checks whether the character is alive
@@ -107,10 +112,21 @@ public class Stats {
     }
 
     //Adds gold if the amount is positive
-    public void addGold(int amount){
-        if(amount > 0) {
+    public void addGold(int amount) {
+        if (amount > 0) {
             gold += amount;
         }
+    }
+
+    //Spends gold only if enough is available
+    public boolean spendGold(int amount) {
+
+        if (amount <= 0 || gold < amount) {
+            return false;
+        }
+
+        gold -= amount;
+        return true;
     }
 
     //Improves the character's statistics after a level up

@@ -7,7 +7,10 @@ public class Player extends Entity {
 
     private final Inventory inventory;
 
-    public Player(String name, Stats stats) {
+    public Player(
+            String name,
+            Stats stats
+    ) {
         super(name, stats);
         this.inventory = new Inventory();
     }
@@ -30,5 +33,10 @@ public class Player extends Entity {
     //Adds gold to the player
     public void addGold(int amount) {
         getStats().addGold(amount);
+    }
+
+    //Spends gold if the player has enough
+    public boolean spendGold(int amount) {
+        return getStats().spendGold(amount);
     }
 }
