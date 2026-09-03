@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.entity;
 
-//Classe base astratta per tutti i personaggi del gioco
+//Abstract class for all entities in the game
 public abstract class Entity {
 
     private final String name;
@@ -10,6 +10,7 @@ public abstract class Entity {
         this.name = name;
         this.stats = stats;
     }
+
     public String getName() {
         return name;
     }
@@ -18,20 +19,23 @@ public abstract class Entity {
         return stats;
     }
 
+    //Checks whether the entity is alive
     public boolean isAlive() {
         return stats.isAlive();
     }
 
+    //Applies damage to the entity
     public void takeDamage(int damage) {
         stats.takeDamage(damage);
     }
 
+    //Returns the attack value of the entity
     public int getAttackValue() {
         return stats.getAttack();
     }
 
-    //Metodo per attaccare un altro personaggio
-    public void attack(Entity target) {
-        target.takeDamage(getAttackValue());
+    //Returns the defense value of the entity
+    public int getDefenseValue() {
+        return stats.getDefense();
     }
 }

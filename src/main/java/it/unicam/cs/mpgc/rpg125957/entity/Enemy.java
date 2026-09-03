@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.entity;
 
-//Classe che rappresenta un nemico
+//Represents an enemy
 public class Enemy extends Entity {
 
     private final EnemyType type;
@@ -14,17 +14,17 @@ public class Enemy extends Entity {
         this.rewardGold = rewardGold;
     }
 
-    //Tipo del nemico
+    //Type of enemy
     public EnemyType getType() {
         return type;
     }
 
-    //Esperienza ottenuta sconfiggendo il nemico
+    //Experience awarded for defeating the enemy
     public int getRewardExperience() {
         return rewardExperience;
     }
 
-    //Oro ottenuto sconfiggendo il nemico
+    //Gold gained by defeating the enemy
     public int getRewardGold() {
         return rewardGold;
     }

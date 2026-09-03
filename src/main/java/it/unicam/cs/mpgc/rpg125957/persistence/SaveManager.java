@@ -2,12 +2,12 @@ package it.unicam.cs.mpgc.rpg125957.persistence;
 
 import java.io.IOException;
 
-//Interfaccia per la gestione della persistenza
+//Interface for managing game persistence
 public interface SaveManager {
 
-    //Salva i dati della partita
+    //Saves the game data
     void save(SaveData saveData) throws IOException;
 
-    //Carica i dati della partita
+    //Load the game data
     SaveData load() throws IOException;
 }

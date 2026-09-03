@@ -2,8 +2,8 @@ package it.unicam.cs.mpgc.rpg125957.inventory;
 
 import it.unicam.cs.mpgc.rpg125957.entity.Player;
 
-//Oggetto consumabile che cura il giocatore
-public class Potion extends Item {
+//Represents a consumable item that heals the player
+public class Potion extends Item implements UsableItem {
 
     private final int healAmount;
 
@@ -12,13 +12,14 @@ public class Potion extends Item {
         this.healAmount = healAmount;
     }
 
-    //Quantità di vita recuperata
+    //Amount of health restored
     public int getHealAmount() {
         return healAmount;
     }
 
-    //Usa la posizione sul giocatore
+    //Uses the potion on the player
+    @Override
     public void use(Player player) {
-        player.getStats().heal(healAmount);
+        player.heal(healAmount);
     }
 }

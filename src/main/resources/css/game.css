@@ -1,0 +1,189 @@
+.root {
+    -fx-background-color: #101010;
+    -fx-font-family: "Segoe UI";
+}
+
+.label {
+    -fx-text-fill: #e8e8e8;
+}
+
+/* CHARACTER */
+
+.character-name {
+    -fx-text-fill: #f0d28a;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.character-level {
+    -fx-text-fill: #b8b8b8;
+    -fx-font-size: 13px;
+}
+
+.health-label {
+    -fx-text-fill: #f1f1f1;
+    -fx-font-weight: bold;
+}
+
+.experience-label {
+    -fx-text-fill: #7ab8ff;
+    -fx-font-size: 13px;
+}
+
+/* HEALTH BAR */
+
+.health-bar {
+    -fx-pref-height: 17px;
+}
+
+.health-bar > .track {
+    -fx-background-color: #292929;
+    -fx-background-radius: 4;
+}
+
+.health-bar > .bar {
+    -fx-background-color: #b33939;
+    -fx-background-radius: 4;
+}
+
+/* EXPERIENCE BAR */
+
+.experience-bar {
+    -fx-pref-height: 13px;
+}
+
+.experience-bar > .track {
+    -fx-background-color: #292929;
+    -fx-background-radius: 4;
+}
+
+.experience-bar > .bar {
+    -fx-background-color: #3f7fc4;
+    -fx-background-radius: 4;
+}
+
+/* BUTTONS */
+
+.button {
+    -fx-background-color: #242424;
+    -fx-text-fill: #f0d28a;
+
+    -fx-border-color: #7a6133;
+    -fx-border-width: 1.5;
+
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+
+    -fx-padding: 11 20 11 20;
+
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3a3121;
+    -fx-border-color: #c69c4a;
+}
+
+.button:pressed {
+    -fx-background-color: #1b1b1b;
+}
+
+/* COMBAT LOG */
+
+.text-area {
+    -fx-control-inner-background: #171717;
+    -fx-text-fill: #dddddd;
+
+    -fx-border-color: #625437;
+    -fx-border-width: 1;
+
+    -fx-font-family: "Consolas";
+    -fx-font-size: 13px;
+}
+
+.text-area .content {
+    -fx-background-color: #171717;
+}
+
+/* BATTLE AREA */
+
+.battle-view {
+    -fx-border-color: #7a6133;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.damage-label {
+    -fx-text-fill: #ff3b30;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.9),
+        5,
+        0.3,
+        2,
+        2
+    );
+}
+.floor-transition-label {
+    -fx-text-fill: #f0d28a;
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.95),
+        8,
+        0.4,
+        3,
+        3
+    );
+}
+.game-over-label {
+    -fx-text-fill: #d32f2f;
+    -fx-font-size: 52px;
+    -fx-font-weight: bold;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.95),
+        10,
+        0.5,
+        3,
+        3
+    );
+}
+.potion-effect-label {
+    -fx-text-fill: #7cff72;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.9),
+        5,
+        0.3,
+        2,
+        2
+    );
+}
+.screen-message-label {
+    -fx-text-fill: #f0d28a;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.95),
+        7,
+        0.4,
+        2,
+        2
+    );
+}

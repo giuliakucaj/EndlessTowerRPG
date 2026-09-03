@@ -2,7 +2,7 @@ package it.unicam.cs.mpgc.rpg125957.tower;
 
 import it.unicam.cs.mpgc.rpg125957.entity.Enemy;
 
-//Classe che rappresenta un piano della torre
+//Represents a floor of the tower
 public class Floor {
 
     private final int floorNumber;

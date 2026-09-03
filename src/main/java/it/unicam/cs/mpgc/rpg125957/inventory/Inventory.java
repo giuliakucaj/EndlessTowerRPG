@@ -3,50 +3,43 @@ package it.unicam.cs.mpgc.rpg125957.inventory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-//Classe che gestisce gli oggetti posseduti dal giocatore
+//Manages the player's inventory
 public class Inventory {
 
     private final List<Item> items;
 
-    //Costruttore dell'inventario
     public Inventory() {
         this.items = new ArrayList<>();
     }
 
-    //Aggiunge un oggetto all'inventario
+    //Adds an item to the inventory
     public void addItem(Item item) {
         if (item != null) {
             items.add(item);
         }
     }
 
-    //Rimuove un oggetto dall'inventario
+    //Removes an item from the inventory
     public void removeItem(Item item) {
         items.remove(item);
     }
 
-    //Restituisce una lista non modificabile degli oggetti
+    //Returns an unmodifiable list of items
     public List<Item> getItems() {
         return Collections.unmodifiableList(items);
     }
 
-    //Controlla se l'inventario contiene almeno una pozione
-    public boolean hasPotion() {
+    //Returns the first usable item, if any
+    public Optional<UsableItem> getFirstUsableItem() {
         return items.stream()
-                .anyMatch(item -> item instanceof Potion);
+                .filter(item -> item instanceof UsableItem)
+                .map(item -> (UsableItem) item)
+                .findFirst();
     }
 
-    //Restituisce la prima pozione disponibile, se presente
-    public Potion getFirstPotion() {
-        return items.stream()
-                .filter(item -> item instanceof Potion)
-                .map(item -> (Potion) item)
-                .findFirst()
-                .orElse(null);
-    }
-
-    //Conta quante pozioni sono presenti nell'inventario
+    //Counts the number of potions in the inventory
     public long countPotions() {
         return items.stream()
                 .filter(item -> item instanceof Potion)

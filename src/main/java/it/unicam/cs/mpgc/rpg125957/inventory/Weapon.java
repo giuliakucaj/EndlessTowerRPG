@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg125957.inventory;
 
-//Oggetto equipaggiabile che aumenta l'attacco
+//Represents an equippable item that increases defense
 public class Weapon extends Item {
 
     private final int attackBonus;
@@ -10,7 +10,7 @@ public class Weapon extends Item {
         this.attackBonus = attackBonus;
     }
 
-    //Bonus di attaco fornito dall'arma
+    //Attack bonus provided by the weapon
     public int getAttackBonus() {
         return attackBonus;
     }

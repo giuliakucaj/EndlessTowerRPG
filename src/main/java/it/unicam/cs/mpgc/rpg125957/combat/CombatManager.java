@@ -2,21 +2,26 @@ package it.unicam.cs.mpgc.rpg125957.combat;
 
 import it.unicam.cs.mpgc.rpg125957.entity.Entity;
 
-//Classe che gestisce un'azione di combattimento
+//Handles combat actions
 public class CombatManager {
 
     private final DamageCalculator damageCalculator;
 
-    public CombatManager() {
-        this.damageCalculator = new DamageCalculator();
+    public CombatManager(DamageCalculator damageCalculator) {
+        this.damageCalculator = damageCalculator;
     }
 
-    //Esegue un attacco tra due entità
+    //Executes an attack between two entities
     public CombatResult attack(Entity attacker, Entity defender) {
-        int damage = damageCalculator.calculateDamage(attacker, defender);
+        int damage = damageCalculator.calculateDamage(
+                attacker,
+                defender
+        );
+
         defender.takeDamage(damage);
 
-        String message = attacker.getName() + " attacks "
+        String message = attacker.getName()
+                + " attacks "
                 + defender.getName()
                 + " and deals "
                 + damage
