@@ -1,8 +1,8 @@
 # Endless Tower RPG
 
-Endless Tower RPG is a turn-based role-playing game developed in Java as part of the exam **Metodologie di Programmazionne** at Univerity of Camerino.
+Endless Tower RPG is a turn-based role-playing game developed in Java as part of the exam **Metodologie di Programmazione** at the University of Camerino.
 
-The player must climb a tower made up of progressively more challenging floors, defeating enemies and improving their character through combat,experience, gold, and items.
+The player must climb a tower made up of progressively more challenging floors, defeating enemies and improving their character through combat, experience, gold and items.
 
 <img width="1113" height="721" alt="image" src="https://github.com/user-attachments/assets/f123fae0-0cdf-42a1-915d-c6eb9551c5a8" />
 
@@ -18,7 +18,7 @@ The player must climb a tower made up of progressively more challenging floors, 
 ### Instructions
 
 ```bash
-git clone https://github.com/giuliakucaj/EndlessTowerRPG.git
+git clone https://github.com/giuliakucaj/EndlessTowerRPG
 cd EndlessTowerRPG
 ```
 
