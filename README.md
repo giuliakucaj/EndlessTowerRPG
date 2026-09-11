@@ -2,7 +2,9 @@
 
 Endless Tower RPG is a turn-based role-playing game developed in Java as part of the exam **Metodologie di Programmazionne** at Univerity of Camerino.
 
-The player must climb an endless tower, defeat progressively stronger enemies, gain experience, collect loot, and advance through increasingly challenging floors.
+The player must climb a tower made up of progressively more challenging floors, defeating enemies and improving their character through combat,experience, gold, and items.
+
+<img width="1113" height="721" alt="image" src="https://github.com/user-attachments/assets/f123fae0-0cdf-42a1-915d-c6eb9551c5a8" />
 
 ---
 
@@ -32,14 +34,6 @@ cd EndlessTowerRPG
 ./gradlew run
 ```
 
-### Tests
-
-```bash
-./gradlew test
-```
-
----
-
 ## 🤖 Use of Artificial Intelligence
 
 Artificial Intelligence tools, particularly **ChatGPT**, were used during the development of this project to support:
@@ -50,6 +44,6 @@ Artificial Intelligence tools, particularly **ChatGPT**, were used during the de
 - documentation;
 - learning object-oriented programming concepts and JavaFX.
 
-All architectural decisions, software implementation, integration, testing, and validation were carried out personally.
+All architectural decisions, software implementation, integration and validation were carried out personally.
 
 For a detailed declaration of AI usage, please refer to the project Wiki.
