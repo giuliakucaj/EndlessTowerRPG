@@ -7,5 +7,6 @@
   "level": 2,
   "experience": 130,
   "gold": 70,
-  "currentFloor": 4
+  "currentFloor": 4,
+  "potionCount": 1
 }

@@ -23,7 +23,7 @@ public class SaveDataMapper {
                 stats.getExperience(),
                 stats.getGold(),
                 gameState.getCurrentFloor().getFloorNumber(),
-                (int) player.getInventory().countPotions()
+                (int) player.getInventory().countItems(Potion.class)
         );
     }
 

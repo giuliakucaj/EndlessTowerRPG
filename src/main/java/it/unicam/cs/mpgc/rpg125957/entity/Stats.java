@@ -103,12 +103,18 @@ public class Stats {
 
         experience += amount;
 
-        if (experience >= level * 100) {
+        if (experience >= getRequiredExperience()) {
             levelUp();
             return true;
         }
 
         return false;
+    }
+
+
+    //100 xp required to level up
+    public int getRequiredExperience() {
+        return level * 100;
     }
 
     //Adds gold if the amount is positive

@@ -384,7 +384,7 @@ public class GameController {
         );
 
         int requiredExperience =
-                player.getStats().getLevel() * 100;
+                player.getStats().getRequiredExperience();
 
         playerView.updateExperience(
                 player.getStats().getExperience(),
@@ -420,8 +420,8 @@ public class GameController {
         gameView.getPotionsLabel()
                 .setText(
                         "Potions: "
-                                + player.getInventory()
-                                .countPotions()
+                                + player.getInventory().
+                                countItems(Potion.class)
                 );
     }
 }
