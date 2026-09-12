@@ -33,9 +33,6 @@ cd EndlessTowerRPG
 ```bash
 ./gradlew run
 ```
-<<<<<<< HEAD
-=======
->>>>>>> 7291c5c...
 
 ## 🤖 Use of Artificial Intelligence
 
